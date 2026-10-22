@@ -1182,8 +1182,592 @@ $n$ --- предметов, $k$ --- ящиков
 \noindent
 \textbf{Обозн.} В случае, если $n = k$, то $B(n,k)$ обозначается $B_n$ и называется \textbf{числом Белла}.
 
+
+\section*{\centerline{\Large\textbf{\S \,\, Рекуррентные отношения}}}
+\vspace{0.4cm}
+
+\textbf{Задача:} Дана полоска $2 \times n$. Сколькими способами можно ее разбить на доминошки?
+
+\noindent \textbf{Решение:} 
+
+\begin{center}
+\begin{tikzpicture}[scale=0.5, every node/.style={font=\small}]
+  \draw[step=1, gray!40, very thin] (0,0) grid (8,2);
+  \draw[thick] (0,0) rectangle (8,2);
+  \node at (4,1) {$A_n$};
+  \node at (7.5,1.5) {$\times$};
+  \node[left] at (-0.5,1) {все способы};
+
+  \begin{scope}[yshift=-3.5cm]
+    \draw[step=1, gray!40, very thin] (0,0) grid (8,2);
+    \draw[thick] (0,0) rectangle (8,2);
+    \draw[thick, fill=gray!30] (7,0) rectangle (8,2);   
+    \draw[dashed] (7,0) -- (7,2);
+    \node at (3.5,1) {$A_{n-1}$};
+    \node at (7.5,1.5) {$\times$};
+    \node[left] at (-0.5,1) {$B_n$: способы с вертикальной};
+  \end{scope}
+
+  \begin{scope}[yshift=-7cm]
+    \draw[step=1, gray!40, very thin] (0,0) grid (8,2);
+    \draw[thick] (0,0) rectangle (8,2);
+    \draw[thick, fill=gray!30] (6,1) rectangle (8,2);  
+    \draw[thick, fill=gray!30] (6,0) rectangle (8,1);   
+    \draw[dashed] (6,0) -- (6,2);
+    \node at (3,1) {$A_{n-2}$};
+    \node at (7.5,1.5) {$\times$};
+    \node[left] at (-0.5,1) {$C_n$: способы с горизонтальной};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\noindent Тогда $A_n=B_n+C_n$
+Заметим, что $B_n=A_{n-1}$, а $C_n=A_{n-2}$, т.к. нижняя угловая клетка однозначно заполняется горизонтальной доминошкой
+$A_n=A_{n-1}+A_{n-2}$
+
+\medskip
+\noindent \textbf{Опр.} Последовательность $F_1=F_2=1$ и $F_{n+1} = F_n+F_{n+1}$ называются числами Фибоначчи. Чтобы понять как наша задача с ними связана
+
+\begin{tikzpicture}[x=0.8cm, y=0.8cm, every node/.style={font=\scriptsize}]
+
+  \draw (0,0) rectangle (1,2);
+  \node at (0.5,2.4) {$2\times1$};
+  \node[font=\normalsize] at (2.2,1) {$-\ 1$};
+  \node[font=\normalsize] at (4,1) {$=F_2$};
+
+  \begin{scope}[yshift=-2.8cm]
+    \draw (0,0) rectangle (2,2);
+    \draw (1,0) -- (1,2);
+    \node at (1,2.4) {$2\times2$};
+    \draw (3.5,0) rectangle (5.5,2);
+    \draw (3.5,1) -- (5.5,1);
+    \node at (4.5,2.4) {$2\times2$};
+    \node[font=\normalsize] at (2.75,1) {,};
+    \node[font=\normalsize] at (7,1) {$-\ 2$};
+    \node[font=\normalsize] at (8.8,1) {$=F_3$};
+  \end{scope}
+
+  \begin{scope}[yshift=-5.6cm]
+    \draw (0,0) rectangle (3,2);
+    \draw (2,0) -- (2,2);
+    \node[font=\normalsize] at (1,1) {?};
+    \node at (1.5,2.4) {$2\times3$};
+    \node[font=\normalsize] at (1,-0.6) {2};
+    \draw (4.5,0) rectangle (7.5,2);
+    \draw (5.5,0) -- (5.5,2);
+    \draw (5.5,1) -- (7.5,1);
+    \node at (6,2.4) {$2\times3$};
+    \node[font=\normalsize] at (5.5,-0.6) {1};
+    \node[font=\normalsize] at (3.75,1) {,};
+    \node[font=\normalsize] at (9,1) {$-\ 3$};
+    \node[font=\normalsize] at (10.8,1) {$=F_4$};
+  \end{scope}
+
+\end{tikzpicture}
+
+$\Rightarrow A_n = F_{n+1}$
+
+\medskip
+\noindent Такой способ задания отношения называется рекуррентным.
+
+\medskip
+\noindent\textbf{Опр.} Линейными рекуррентными отношениями называются отношения, в которых предыдущие значения используются лишь в первой степени. 
+
+\noindent \textbf{Пример:}
+\begin{align*}
+    F_{n+1} = F_n + F_{n-1} & \quad - \text{лин.} \\
+    A_n = A_{n-1}^2 & \quad - \text{не лин.} \\
+    A_n = A_{n-1} A_{n-2} & \quad - \text{не лин.} \\
+    A_n = 3A_{n-1} + 2^n & \quad - \text{лин.}
+\end{align*}
+
+
+\noindent \textbf{Опр.} Рекуррента называется однородной, если все слагаемые одной степени и в ней отсутствует свободный член (слагаемое, не зависящее от членов последовательности).
+
+\noindent \textbf{Пример:}
+\begin{align*}
+    F_{n+1} = F_n + F_{n-1} & \quad - \text{однород.} \\
+    A_n = 3A_{n-1} + 4A_{n-2} + 2^n & \quad - \text{не однород.}
+\end{align*}
+
+\noindent \subsection*{Линейные однородные рекурренты}
+
+\noindent \textbf{1)} $a_n = C \cdot a_{n-1}$\\
+$a_n = C \cdot a_{n-1} = C \cdot (C \cdot a_{n-2}) = C^2 \cdot a_{n-2} = \dots = C^n \cdot a_0$
+
+\medskip
+\noindent \textbf{2)} $a_n = 4a_{n-1} - 3a_{n-2}, \quad a_0 = 2, \ a_1 = 4$
+
+\vspace{0.5em}
+\noindent Будем искать решения вида $a_n = \lambda^n$:
+\begin{align*}
+    \lambda^n &= 4 \cdot \lambda^{n-1} - 3 \cdot \lambda^{n-2} \quad \Big| : \lambda^{n-2} \\
+    \lambda^2 &= 4\lambda - 3 \\
+    \lambda_{1,2} &= 1; 3 \quad \text{(решим квадратное уравнение)}
+\end{align*}
+
+\noindent Если проигнорируем начальные условия, то решениями будут $1^n$ и $3^n$.
+
+\vspace{0.5em}
+\noindent Заметим, что решениями также будут $C_1 \cdot 1^n$ и $C_2 \cdot 3^n$.
+
+\noindent Более того, решением будет любая сумма $C_1 \cdot 1^n + C_2 \cdot 3^n$.
+
+\noindent Такое называется \textbf{общим решением}.
+
+\bigskip
+\noindent Чтобы найти частное решение, нужно подставить начальные условия:
+$$
+\begin{cases}
+    a_0 = 2 = C_1 \cdot 1^0 + C_2 \cdot 3^0 \\
+    a_1 = 4 = C_1 \cdot 1^1 + C_2 \cdot 3^1
+\end{cases}
+$$
+$$ \Rightarrow C_1 = C_2 = 1 \implies a_n = 3^n + 1 $$
+
+\bigskip
+\noindent \textbf{3)} $a_n = \alpha_1 \cdot a_{n-1} + \alpha_2 \cdot a_{n-2} + \dots + \alpha_k \cdot a_{n-k}$ \\
+$\alpha_1, \dots, \alpha_k$ — коэффициенты
+
+\vspace{0.5em}
+\noindent Напишем уравнение:
+$$ \lambda^n = \alpha_1 \cdot \lambda^{n-1} + \alpha_2 \cdot \lambda^{n-2} + \dots + \alpha_k \cdot \lambda^{n-k} $$
+Поделим на $\lambda^{n-k}$:
+$$ \lambda^k = \alpha_1 \cdot \lambda^{k-1} + \dots + \alpha_{k-1} \cdot \lambda + \alpha_k $$
+Оно называется \textbf{характеристическим уравнением}.
+
+\medskip
+\noindent \textbf{Утв.} Уравнение $n$-ой степени всегда имеет $n$ корней с учётом кратности и комплексных корней. \\
+$\left(\text{кратность корня } \lambda \text{ — это максимальное } k \text{ такое, что } P(x) \ \vdots \ (x - \lambda)^k\right)$
+
+\vspace{1.5em}
+\noindent Если у нас есть $n$ \underline{различных} корней $\lambda_1, \dots, \lambda_n$, то \textbf{общим решением} называется
+$$ C_1 \lambda_1^n + C_2 \lambda_2^n + \dots + C_k \lambda_k^n $$
+для констант $C_1, \dots, C_k$
+
+\vspace{1em}
+\noindent Поймём, что каждое такое является решением.
+
+\noindent Рассмотрим $a_n = \lambda_i^n$
+$$ \lambda_i^n \stackrel{?}{=} \alpha_i \lambda_i^{n-1} + \dots + \alpha_k \lambda_i^{n-k}, \quad \text{что верно так как } \lambda \text{ — его корень} $$
+
+\vspace{0.5em}
+\noindent Пусть есть решение $a_n$. Тогда $C \cdot a_n$ — тоже решение.
+\begin{align*}
+    (C \cdot a_n) &\stackrel{?}{=} \alpha_1 \cdot (C \cdot a_{n-1}) + \alpha_2 \cdot (C \cdot a_{n-2}) + \dots + \alpha_k \cdot (C \cdot a_{n-k}) \quad \Big| : C \\
+    a_n &= \alpha_1 a_{n-1} + \dots + \alpha_k a_{n-k} \quad \checkmark
+\end{align*}
+
+\noindent Пусть есть 2 решения $a_n$ и $b_n$. Тогда $(a_n + b_n)$ — тоже решение.
+$$ (a_n + b_n) \stackrel{?}{=} \alpha_1 (a_{n-1} + b_{n-1}) + \dots + \alpha_k (a_{n-k} + b_{n-k}) $$
+$$ \text{Сгруппируем по } a \text{ и по } b \quad \checkmark $$
+
+\vspace{1em}
+\noindent Чтобы задать последовательность однозначно, нужно $k$ первых членов. Утверждается, что система с $k$ переменными $(C_1 \dots C_k)$ и $k$ уравнениями (для параметров первых $k$ членов) имеет ровно 1 решение.
+
+\noindent Поэтому мы нашли в точности все решения.
+
+\vspace{1em}
+\noindent \textbf{Пример:} $F_n = F_{n-1} + F_{n-2}, \quad F_1 = 1, \ F_2 = 1$
+\begin{align*}
+    \lambda^2 &= \lambda + 1 \quad \text{— характеристическое уравнение}\\
+    \lambda_{1,2} &= \frac{1 \pm \sqrt{5}}{2} \quad \text{— его корни}
+\end{align*}
+
+\noindent Тогда общее решение:
+$$ F_n = C_1 \cdot \left(\frac{1+\sqrt{5}}{2}\right)^n + C_2 \cdot \left(\frac{1-\sqrt{5}}{2}\right)^n $$
+
+\vspace{0.5em}
+\noindent Найдём константы. Часто полезно подставлять 0-ой и 1-ый члены, если они не заданы, то посчитать их:
+$$ F_2 = F_1 + F_0 \implies F_0 = 0 $$
+$$
+\begin{cases}
+    0 = F_0 = C_1 \cdot 1 + C_2 \cdot 1 \\
+    1 = F_1 = C_1 \cdot \left(\frac{1+\sqrt{5}}{2}\right) + C_2 \cdot \left(\frac{1-\sqrt{5}}{2}\right)
+\end{cases}
+$$
+$$ \Rightarrow C_1 = -C_2 \implies C_1 \cdot \left(\frac{1+\sqrt{5}}{2} - \frac{1-\sqrt{5}}{2}\right) = 1 $$
+$$ \Rightarrow C_1 \cdot \sqrt{5} = 1 \implies C_1 = \frac{1}{\sqrt{5}}, \ C_2 = -\frac{1}{\sqrt{5}} $$
+
+$$ F_n = \frac{1}{\sqrt{5}} \left( \left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n \right) $$
+\noindent \textbf{Замеч.} Это называется \textbf{формулой Бине}.
+
+\vspace{1.5em}
+\noindent \textbf{4)} $a_n = 10a_{n-1} - 25a_{n-2}, \quad a_0 = 3, \ a_1 = 5$ %(TODO: на лекции $a_1$ было равно 4, но во второй системе, оно уже равно 5, наверно стоит поменять значение $a_1 = 5$)
+\begin{align*}
+    \lambda^2 &= 10\lambda - 25 \quad \text{— характеристическое уравнение}\\
+    (\lambda - 5)^2 &= 0 \implies \lambda_1 = 5 \quad 
+\end{align*}
+$$
+\begin{cases}
+    3 = C_1 \cdot 5^0 \\
+    5 = C_1 \cdot 5^1
+\end{cases} \quad \times
+$$
+\noindent Рассмотрим рекурренту, у которой корни характеристического уравнения равны $x$ и $y$.
+
+\noindent Тогда $x^n, y^n$ — это общие решения.
+
+\vspace{0.5em}
+\noindent Заметим, что $\frac{x^n - y^n}{x - y}$ тоже решение.
+
+\vspace{0.5em}
+\noindent Если $x$ и $y$ сближать, то $\frac{x^n - y^n}{x - y}$ превратится в $n \cdot x^{n-1}$.
+
+\vspace{0.5em}
+\noindent В нашей задаче будет подходить решение $n \cdot 5^{n-1}$.
+
+\vspace{1em}
+\noindent \textbf{Общее уравнение:} $C_1 \cdot 5^n + C_2 \cdot n \cdot 5^{n-1} = C_1 \cdot 5^n + C_2' \cdot n \cdot 5^n$
+
+\vspace{1em}
+$$
+\begin{cases}
+    3 = C_1 \cdot 5^0 + C_2 \cdot 0 \cdot 5^0 \\
+    5 = C_1 \cdot 5^1 + C_2 \cdot 1 \cdot 5^1 
+\end{cases} \Rightarrow C_1 = 3, \ C_2 = -2
+$$
+
+\vspace{1em}
+$$ a_n = 3 \cdot 5^n - 2 \cdot n \cdot 5^n $$
+\noindent \textbf{5)} $a_n = \alpha_1 a_{n-1} + \dots + \alpha_k a_{n-k}$
+
+\vspace{0.5em}
+\noindent У характеристического уравнения корни $\lambda_1, \dots, \lambda_l$ с кратностями $m_1, \dots, m_l$.
+
+\vspace{0.5em}
+\noindent Тогда общее решение выглядит:
+\begin{align*}
+    a_n = \ &C_{1,1} \lambda_1^n + C_{1,2} \cdot n \cdot \lambda_1^n + \dots + C_{1,m_1} \cdot n^{m_1-1} \cdot \lambda_1^n + \dots + C_{l,m_l} \cdot n^{m_l-1} \cdot \lambda_l^n
+\end{align*}
+
+\subsection*{Линейные неоднородные уравнения}
+\[
+a_n = \alpha_1 \cdot a_{n-1} + \dots + \alpha_k \cdot a_{n-k} + f(n)
+\]
+
+\[
+\text{Общее решение} = \underbrace{\text{Однородное решение}}_{a_n = \alpha_1 a_{n-1} + \dots + \alpha_k a_{n-k}} \quad + \underbrace{\text{Частное решение}}_{b_n = \alpha_1 b_{n-1} + \dots + \alpha_k b_{n-k} + f(n)}
+\]
+
+\noindent Если найти какое-то частное решение $b_n$, то $\forall$ однородного решения $a_n$, $b_n + a_n$ тоже будут решением неоднородной рекурренты.
+
+\[
+\begin{aligned}
+b_n &= \alpha_1 b_{n-1} + \dots + \alpha_k b_{n-k} + f(n) \\
+a_n &= \alpha_1 a_{n-1} + \dots + \alpha_k a_{n-k} \\
+a_n + b_n &= \alpha_1 (a_{n-1} + b_{n-1}) + \dots + \alpha_k (a_{n-k} + b_{n-k}) + f(n)
+\end{aligned}
+\]
+
+\bigskip
+%лекция от 20.09
+\section*{\centerline{\Large\textbf{\S \,\, Дискретная теория вероятностей}}}
+\vspace{0.4cm}
+
+$\Omega$ — множество — пространство элементарных исходов.
+
+\noindent \textbf{Пример:} Подбрасывание монетки $\Omega = \{\text{''решка''}, \text{''орел''}\}$
+
+\noindent Бросок кубика $\Omega = \{1, \dots, 6\}$
+
+\noindent $Pr$ — функция $\Omega \rightarrow \mathbb{R}_{+, 0}$, \quad $\sum_{\omega \in \Omega} Pr(\omega) = 1$
+
+\vspace{0.5em}
+\noindent Событием называется подмножество $\Omega$, говорят, что событие произошло при элементарном исходе $\omega$, если $\omega$ принадлежит этому подмножеству.
+
+\vspace{0.5em}
+\noindent $\mathcal{A}_0$ — это множество всех событий. Из $\mathcal{A}_0$ можно получить $\mathcal{A}$ — множество всех возможных пересечений и объединений событий из $\mathcal{A}_0$.
+
+\vspace{0.5em}
+\noindent
+$\mathcal{A}$ — алгебра событий.
+
+\medskip
+\noindent \textbf{Опр.} Вероятностным пространством называется тройка $(\Omega, \mathcal{A}, Pr)$, где $\Omega, \mathcal{A}, Pr$ описаны выше.
+
+\vspace{0.5em}
+\noindent
+Мы будем изучать случаи конечного и счётного $\Omega$. В этом случае $\mathcal{A}$ можно считать равным $2^{\Omega}$ (множеством всех подмножеств).
+
+\vspace{0.5em}
+\noindent
+\textbf{Пример:} Подбрасывание монетки, пока не выпадает орёл.
+
+\noindent
+$\Omega = \{1, 2, 3, \dots\}$ — сколько раз подбросили монетку.
+
+\noindent
+$Pr(\text{1 подбрасывание}) = \frac{1}{2}$
+
+\noindent
+$Pr(\text{2 подбрасывания}) = \frac{1}{4}$
+
+\noindent
+$\dots$
+
+\noindent
+$\sum_{\omega \in \Omega} Pr(\omega) = 1$
+
+\noindent
+В этом случае $\mathcal{A}$ счетно, хотя вероятность всех событий больше 0.
+
+\vspace{0.5em}
+\noindent Можно говорить про $Pr(A)$ для события $A$:
+\[
+Pr(A) = \sum_{\omega \in A} Pr(\omega)
+\]
+
+\noindent
+\textbf{Свойства:} 
+\begin{align*}
+& Pr(\varnothing) = 0, \quad Pr(\Omega) = 1 \\
+& Pr(A \cup B) = Pr(A) + Pr(B) - Pr(A \cap B)
+\end{align*}
+
+\vspace{0.5em}
+\noindent
+\textbf{Опр.} События $A$ и $B$ называются \textit{несовместными}, если $Pr(A \cap B) = 0$.
+
+$$Pr(A \cup B) = Pr(A) + Pr(B), \text{если $A$ и $B$ несовместны}.$$
+$$Pr(\bar{A}) = 1 - Pr(A)$$
+
+\vspace{0.5em}
+\noindent
+\textbf{Опр.} События $A_1, \dots, A_n$ называются полной группой несовместных событий, если $A_1, \dots, A_n$ --- это разбиение $\Omega$.
+
+\noindent
+В этом случае $Pr(A_1) + \dots + Pr(A_n) = 1$.
+\\\\
+Часто элементарные исходы равновероятны, то есть $Pr(\omega_i) = Pr(\omega_j) \quad \forall i, j$.
+
+\[
+Pr(\omega) = \frac{1}{|\Omega|}
+\]
+\[
+Pr(A) = \frac{|A|}{|\Omega|}
+\]
+
+\vspace{0.5em}
+\noindent
+\textbf{Пример:} Бросок кубика
+\begin{align*}
+& A \text{ — выпадание чётного числа} \\
+& B \text{ — выпадание числа } > 3
+\end{align*}
+
+\[
+Pr(A) = \frac{|A|}{|\Omega|} = \frac{3}{6} = \frac{1}{2}, \quad Pr(B) = \frac{|B|}{|\Omega|} = \frac{3}{6} = \frac{1}{2}
+\]
+
+\[
+Pr(A \cap B) = \frac{|A \cap B|}{|\Omega|} = \frac{2}{6} = \frac{1}{3}
+\]
+
+\noindent
+\textbf{Опр.} \textit{Условная вероятность} — это вероятность события $A$ при условии, что событие $B$ уже произошло.
+
+\noindent
+\textbf{Обозн.} $Pr(A \mid B)$
+
+\vspace{0.3em}
+\noindent
+При событии $B$ пространство элементарных исходов сужается с $\Omega$ на $B$.
+
+\noindent
+Поэтому:
+\[
+Pr(A \mid B) = \frac{Pr(A \cap B)}{Pr(B)}
+\]
+\noindent
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+    % ===== Левый рисунок: Omega, A, B =====
+    \def\ax{-0.6} \def\bx{0.6} \def\r{1.2}
+
+    \draw (0,0) circle (2.6);
+    \node at (0,2.1) {$\Omega$};
+
+    % заливка пересечения A \cap B
+    \begin{scope}
+        \clip (\ax,0) circle (\r);
+        \fill[gray!35] (\bx,0) circle (\r);
+    \end{scope}
+    \draw (\ax,0) circle (\r);
+    \draw (\bx,0) circle (\r);
+
+    \node at (-1.3,0.8) {$A$};
+    \node at (1.3,0.8) {$B$};
+    \node[font=\footnotesize] at (0,0) {$A\cap B$};
+
+    % ===== Стрелка =====
+    \draw[-{Stealth[length=2.5mm]}, thick] (3,0) -- (4.2,0);
+
+    % ===== Правый рисунок: только B, внутри дуга границы A =====
+    \def\cx{6.3}
+    \begin{scope}
+        \clip (\cx,0) circle (1.4);
+        \fill[gray!35] (\cx-1.2,0) circle (1.2);
+        \draw (\cx-1.2,0) circle (1.2); % виден только кусок внутри B
+    \end{scope}
+    \draw (\cx,0) circle (1.4);
+    \node at (\cx+0.7,1.0) {$B$};
+    \node[font=\footnotesize] at (\cx-0.5,0) {$A\cap B$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{1.5em}
+
+\noindent
+\textbf{Свойства условной вероятности:}
+\begin{enumerate}
+    \item $Pr(A \mid A) = 1, \quad Pr(\varnothing \mid A) = 0$
+    \item $Pr(A \mid B) = 1$, \quad если $B \subset A$
+    \item Если $B_1 \cap B_2 = \varnothing$, то:
+    \[
+    Pr(A \cap (B_1 \cup B_2)) = Pr((A \cap B_1) \cup (A \cap B_2)) = Pr(A \cap B_1) + Pr(A \cap B_2)
+    \]
+    и
+    \[
+    Pr((B_1 \cup B_2) \mid A) = Pr(B_1 \mid A) + Pr(B_2 \mid A)
+    \]
+\end{enumerate}
+
+\[
+Pr(B \mid A) + Pr(\bar{B} \mid A) = 1
+\]
+
+\vspace{1em}
+\noindent
+\textbf{Пример }(предыдущий):
+\[
+Pr(A \mid B) = \frac{Pr(A \cap B)}{Pr(B)} = \frac{1/3}{1/2} = \frac{2}{3}
+\]
+\[
+Pr(A \mid B) = \frac{|A \cap B|}{|B|} = \frac{2}{3}
+\]
+
+
+% Вывод формулы полной вероятности
+\noindent
+\begin{align*}
+Pr(B) \cdot Pr(A \mid B) &= Pr(A \cap B) \\
+&\quad\qquad + \\
+Pr(\bar{B}) \cdot Pr(A \mid \bar{B}) &= Pr(A \cap \bar{B}) \\
+&\quad\qquad = \\
+&\quad\quad Pr(A)
+\end{align*}
+
+\noindent
+\textbf{Утв. (Формула полной вероятности):} \\
+Пусть $A_1, \dots, A_n$ — полная группа несовместных событий. Тогда:
+\[
+Pr(B) = \sum_{i=1}^{n} Pr(B \mid A_i) \cdot Pr(A_i)
+\]
+
+\vspace{0.5em}
+\noindent
+\textbf{Док-во:} \\
+События $A_1 \cap B, A_2 \cap B, \dots, A_n \cap B$ — несовместны.
+\[
+\Rightarrow \sum_{i=1}^{n} Pr(A_i \cap B) = Pr\left(\bigcup_{i=1}^{n} (A_i \cap B)\right)
+\]
+
+\vspace{1.5em}
+\noindent
+\textbf{Пример.} Завод произвёл 100 деталей. 
+60 произвёл первый станок, 25 — второй, 15 — третий. 
+Первый делает бракованную деталь с вероятностью $1\%$, второй — $3\%$, третий — $2\%$. 
+Какова вероятность брака?
+
+\vspace{0.5em}
+\noindent
+\textbf{Решение:} \\
+Пусть событие $B$ — брак.
+\begin{align*}
+& A_1 \text{ — деталь 1 мастера} \\
+& A_2 \text{ — деталь 2 мастера} \\
+& A_3 \text{ — деталь 3 мастера}
+\end{align*}
+
+\[
+Pr(B) = 0{,}01 \cdot 0{,}6 + 0{,}03 \cdot 0{,}25 + 0{,}02 \cdot 0{,}15 = 0{,}006 + 0{,}0075 + 0{,}003 = 0{,}0165\]
+
+\noindent
+\textbf{Понять, у кого больше брака (Формула Байеса):}
+\[
+Pr(A_1 \mid B) = \frac{0{,}01 \cdot 0{,}6}{Pr(B)}
+\]
+\[
+Pr(A_2 \mid B) = \frac{0{,}03 \cdot 0{,}25}{Pr(B)}
+\]
+\[
+Pr(A_3 \mid B) = \frac{0{,}02 \cdot 0{,}15}{Pr(B)}
+\]
+
+\noindent
+\textbf{Утв.} 
+
+1.\[
+Pr(B \mid A) = \frac{Pr(A \mid B) \cdot Pr(B)}{Pr(A)}
+\]
+
+2. Пусть $A_1, \dots, A_n$ — полная группа несовместных событий. Тогда:
+\[
+Pr(A_i \mid B) = \frac{Pr(A_i) \cdot Pr(B \mid A_i)}{Pr(A_1) \cdot Pr(B \mid A_1) + \dots + Pr(A_n) \cdot Pr(B \mid A_n)} - \textbf{Формула Байеса}
+\]
+
+\vspace{0.5em}
+\noindent
+\textbf{Док-во:} \\
+1) $Pr(B \mid A) \cdot Pr(A) = Pr(A \cap B) = Pr(A \mid B) \cdot Pr(B)$ \\
+2) В знаменателе формула полной вероятности события $B$.
+
+\medskip
+\noindent \textbf{Опр.} События $A$ и $B$ называются \textit{независимыми}, если $Pr(A \mid B) = Pr(A)$.
+
+\vspace{0.5em}
+\noindent \textbf{Утв.} События $A$ и $B$ независимы тогда и только тогда, когда $Pr(A \cap B) = Pr(A) \cdot Pr(B)$.
+
+\vspace{0.5em}
+\noindent \textbf{Док-во:} $Pr(A \cap B) = Pr(A \mid B) \cdot Pr(B)$
+
+\vspace{0.5em}
+\noindent \textbf{Пример} Бросок кубика:
+\[
+Pr(A \cap B) = \frac{1}{3} \neq \frac{1}{4} = Pr(A) \cdot Pr(B)
+\]
+
+\vspace{0.5em}
+\noindent Пусть событие $C$ — выпало кратное 3 число.
+\[
+Pr(A \cap C) = \frac{1}{6} = Pr(A) \cdot Pr(C)
+\]
+\[
+Pr(B \cap C) = \frac{1}{6} = Pr(B) \cdot Pr(C)
+\]
+\noindent \textbf{Опр.} События $A_1, \dots, A_n$ называют \textit{независимыми в совокупности}, если:
+\[
+Pr(A_1 \cap \dots \cap A_n) = Pr(A_1) \cdot \dots \cdot Pr(A_n)
+\]
+
+\vspace{0.5em}
+\noindent \textbf{Пример} Бросаем 2 кубика: \\
+\begin{align*}
+& A \text{ — выпадение чётного числа на первом} \\
+& B \text{ — выпадение чётного на втором} \\
+& C \text{ — сумма выпавших чисел чётная}
+\end{align*}
+
+\vspace{0.5em}
+\noindent
+Легко заметить, что:
+\begin{align*}
+& A, B \text{ — независимы} \\
+& B, C \text{ — независимы} \\
+& A, C \text{ — независимы}
+\end{align*}
+Но $A, B, C$ в совокупности зависимы.
+
 {\color{gray} V: $\checkmark$}
-
-
-
 \end{document}
